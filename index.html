@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spinning Wheel</title>
+  <style>
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexfangsong.css);
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexming.css);
+    @import url(https://fonts.googleapis.com/css2?family=Satisfy&display=swap);
+
+    .luckBg {
+      background: #b97687;
+      width: 12rem;
+      height: 12rem;
+      border-radius: 50%;
+      margin: 0 auto;
+      padding: 5px;
+      left: 50%;
+    }
+
+    .luckWhellBg,
+    .luckWhellBgMain {
+      background: #ffffff;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rotateStyle {
+      -webkit-transition: transform 5000ms ease-in-out;
+      transition: transform 5000ms ease-in-out;
+    }
+
+    .luckWhellSector {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform-origin: 0% 100%;
+      border: 1px solid #eeb8b8;
+      border-right: 0;
+      border-top: 0;
+      box-sizing: border-box;
+    }
+
+    .luckWhellSector:nth-child(2n) {
+      position: absolute;
+      background: #fdf2f0;
+    }
+
+    .wheel-main {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .prize-list {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .prize-item {
+      position: absolute;
+      left: 50%;
+      height: 50%;
+      padding-top: 15px;
+      box-sizing: border-box;
+      text-align: center;
+      transform-origin: 50% 100%;
+      color: #b97687;
+    }
+
+    .prize_point {
+      position: absolute;
+      left: 50%;
+      background: #b97687;
+      width: 3.6rem;
+      height: 3.6rem;
+      top: 50%;
+      margin-left: -1.8rem;
+      margin-top: -1.8rem;
+      border-radius: 50%;
+    }
+
+    .prize_point::after {
+      position: absolute;
+      left: 50%;
+      top: -1.5rem;
+      width: 0;
+      height: 0;
+      margin-left: -1rem;
+      border: 1rem solid;
+      border-color: transparent transparent #b97687;
+      content: '';
+    }
+
+    .heart {
+      position: absolute;
+      width: 1.4rem;
+      height: 1.4rem;
+      position: relative;
+      transform: rotate(-45deg);
+      background: #fdf2f0;
+      margin-left: 1.1rem;
+      margin-top: 1.3rem;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      background: #fdf2f0;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -0.7rem;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: 0.7rem;
+    }
+
+    p.introduction {
+      position: absolute;
+      padding-top: 0.2rem;
+      margin-left: 1rem;
+      line-height: 1.2rem;
+      font-family: 'Satisfy', cursive;
+      font-size: 0.95rem;
+      color: #b97687;
+      z-index: 9;
+    }
+
+    p.introductionC {
+      position: absolute;
+      padding-top: 0.2rem;
+      margin-left: 1rem;
+      line-height: 1.2rem;
+      font-family: 'cwTeXFangSong', serif;
+      font-size: 0.6rem;
+      color: #b97687;
+      z-index: 9;
+    }
+
+    #warning {
+      width: 14rem;
+      height: 10rem;
+      position: fixed;
+      z-index: 999;
+      top: 120px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fdf2f0;
+      box-shadow: 2px 2px 4px 0 rgba(160, 115, 109, 0.5);
+      border-radius: 10px;
+      border: 1px solid;
+      border-color: #b97687;
+    }
+
+    #ageButton1 {
+      display: flex;
+      justify-content: center;
+    }
+
+    button.check {
+      height: 0.8rem;
+      margin-left: 0.4rem;
+      margin-right: 0.4rem;
+      cursor: pointer;
+      background: #fdf2f0;
+      border-radius: 5px;
+      border: 1px solid;
+      border-color: #eeb8b8;
+      color: #b97687;
+      font-family: 'cwTeXFangSong', serif;
+      font-size: 0.6rem;
+    }
+
+    #answer {
+      width: 14rem;
+      height: 10rem;
+      position: fixed;
+      z-index: 999;
+      top: 140px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fdf2f0;
+      box-shadow: 2px 2px 4px 0 rgba(160, 115, 109, 0.5);
+      border-radius: 10px;
+      border: 1px solid;
+      border-color: #b97687;
+    }
+  </style>
+</head>
+
+<body style="background-color: #fdf2f0;">
+  <div class="luckBg">
+    <div class="luckWhellBg">
+      <div class="luckWhellBgMain rotateStyle">
+      </div>
+      <div class="wheel-main">
+        <div class="prize-list rotateStyle">
+        </div>
+        <div class="prize_point" onclick="prizeRoll()">
+          <p class="introduction">click</p>
+          <div class="heart">
+          </div>
+        </div>
+        <div id="warning">
+          <p class="introductionC" style="width: 12rem; font-weight: bolder; text-align: center;">您即將進入之看板內容需滿十八歲方可瀏覽
+          </p>
+          <br>
+          <p class="introductionC" style="height: 5.5rem; width: 12rem; text-align: center; margin-top: 0.7rem; overflow-y: scroll;">
+            根據「兒童及少年福利與權益保障法」規定，本網站已於非闔家皆宜之看板加以標示。若您尚未年滿十八歲，請點選離開。若您已滿十八歲，亦不可將本區之內容派發、傳閱、出售、出租、交給或借予年齡未滿18歲的人士瀏覽，或將本網站內容向該人士出示、播放或放映。
+          </p>
+          <div id="ageButton1" style="margin-top: 7rem;">
+            <button class="check" onclick="show_content()">同意，且已年滿18歲</button>
+            <button class="check">不同意，或未滿18歲</button>
+          </div>
+        </div>
+        <div id="answer" style="display: none;">
+          <p id="answerTitle" class="introductionC" style="width: 12rem; font-weight: bolder; text-align: center;"></p>
+          <br>
+            <p id="answerContent" class="introductionC"
+              style="height: 5.5rem; width: 12rem; text-align: left; margin-top: 1rem; font-size: 0.6rem; overflow-y: scroll;"></p>
+          <div id="ageButton1" style="margin-top: 7.2rem;">
+            <button class="check" onclick="close_answer()">再轉一次</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    const CIRCLE_ANGLE = 360;
+    const BIGSIZE = 24;
+    let data = [
+      { id: 1, prize_name: "聲音", content: "「你叫得太大聲了。」<br>他伸手摀住對方的嘴，身下的動作卻沒有半分收斂，反而進得更深一些。" },
+      { id: 2, prize_name: "退房", content: "大部分的房客都已經退房了，房間門大敞，整理房間的工讀生正在不遠處哼著歌。<br>「小聲點，別把人喊過來了。」" },
+      { id: 3, prize_name: "疼痛", content: "他修長的手指在對方的傷口上輕撫，突然發狠似的往下摳撓，傷口上剛形成的痂裂開，殷紅的血浸濕他的指尖。<br>「痛嗎？」<br>因為疼痛溢出的生理淚水被他溫柔的抹去，鮮血沾在對方的臉上，染出一種獨特的，驚心動魄的豔麗。<br>「總要痛點……好讓你長長記性。」" },
+      { id: 4, prize_name: "紅酒", content: "電話的另一邊是下屬彙報的聲音，他漫不經心的將紅酒淋在對方的腰側，酒液滴落在地毯上，和欲火一樣宛如綻放的花。" },
+      { id: 5, prize_name: "辦公桌", content: "寬大的辦公桌下正好足夠一個人藏身其中，話音斷斷續續的傳來，時機正好適合一些小小的惡作劇。" },
+      { id: 6, prize_name: "好孩子", content: "「好孩子。」<br>性器抵在喉嚨讓他幾乎發不出聲音，對方獎勵似的摸了摸他的頭髮，聲音多了一絲低啞。" },
+      { id: 7, prize_name: "家教", content: "他像是覺得屈辱般的扭過頭，真實的快感避無可避的從交合處傳來，對方的手按在他的腹肌上，「老師，你舒服嗎？」" },
+      { id: 8, prize_name: "戒指", content: "或許是因為憤怒失去理智，又或許是一場懲罰，他沒有將手上的戒指摘下，隨著手指每一次插入，帶著涼意的金屬貼上敏感的肌膚。" }
+    ];
+    let angleList = [];
+    let gift_id = 3;
+    let prizeList = formatPrizeList(data);
+    let index = '';
+    let isRotating = false;
+    let rotateAngle = 0;
+    let bgDom = document.getElementsByClassName('luckWhellBgMain')[0];
+    let divDom = document.getElementsByClassName('prize-list')[0];
+    prizeAddHtml(prizeList);
+    function formatPrizeList(list) {
+      const l = list.length;
+      const average = CIRCLE_ANGLE / l;
+      const half = average / 2;
+      const rightBig = l == 2 ? '50' : '0';
+      const heightBig = l <= 3 ? '100' : '50';
+      const topBig = l == 3 ? '-50' : '0';
+      const skewMain = l <= 2 ? 0 : -(l - 4) * 90 / l;
+      list.forEach((item, i) => {
+        const angle = -(i * average + half);
+        const bigAge = l > 2 ? i * 360 / l : '0';
+        item.style = `-webkit-transform: rotate(${-angle}deg);
+          transform: rotate(${-angle}deg);
+          width:${100 / l * 2}%;  
+          margin-left: -${100 / l}%;
+          font-size:${BIGSIZE - l}px;
+          font-family: 'cwTeXFangSong', serif;`;
+        item.style2 = `-webkit-transform: rotate(${bigAge}deg);
+          transform: rotate(${bigAge}deg) skewY(${skewMain}deg);
+          right:${rightBig * i}%;
+          height:${heightBig}%;
+          top:${topBig}%;
+          width:${l == 1 ? 100 : 50}%;
+          background:${item.color};`
+        angleList.push(angle);
+      });
+      return list;
+    };
+    function prizeAddHtml(prizeList) {
+      console.log(prizeList);
+      let htmlBg = '';
+      let htmlDiv = '';
+      for (let i = 0, len = prizeList.length; i < len; i++) {
+        htmlBg += `<div class="luckWhellSector" style="${prizeList[i].style2}"></div>`;
+        htmlDiv += `<div class="prize-item"  style="${prizeList[i].style}">							
+          <div>
+            ${prizeList[i].prize_name}
+          </div>
+        </div>`
+      }
+      bgDom.innerHTML = htmlBg;
+      divDom.innerHTML = htmlDiv;
+    };
+    function prizeRoll() {
+      if (isRotating) return false;
+      gift_id = Math.floor(1 + Math.random() * prizeList.length);
+      console.log(gift_id);
+      prizeList.forEach((item, i) => {
+        if (item.id == gift_id) index = i;
+      });
+      rotating();
+    };
+    function rotating() {
+      isRotating = true;
+      const config = {
+        duration: 5000,
+        circle: 8,
+        mode: "ease-in-out"
+      }
+      const angle =
+        rotateAngle +
+        config.circle * CIRCLE_ANGLE +
+        angleList[index] -
+        (rotateAngle % CIRCLE_ANGLE);
+      rotateAngle = angle;
+      bgDom.style.transform = `rotate(${rotateAngle}deg)`
+      divDom.style.transform = `rotate(${rotateAngle}deg)`
+      setTimeout(() => {
+        isRotating = false;
+        show_answer();
+        console.log('旋转结束');
+        document.getElementById('answerTitle').innerHTML = `［${prizeList[gift_id - 1].prize_name}］`;
+        document.getElementById('answerContent').innerHTML = `${prizeList[gift_id - 1].content}`;
+      }, config.duration + 500);
+    }
+    function show_content() {
+      document.getElementById("warning").style.display = 'none';
+    }
+    function show_answer() {
+      document.getElementById("answer").style.display = 'block';
+    }
+    function close_answer() {
+      document.getElementById("answer").style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>
